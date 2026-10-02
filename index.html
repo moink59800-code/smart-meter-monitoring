@@ -3,148 +3,161 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Smart Meter IoT Control Center</title>
+  <title>Smart Grid IoT SCADA Station</title>
   <style>
     :root {
-      --bg-main: #0a0f1d;
-      --panel-bg: #11192e;
-      --card-bg: #16203a;
-      --border-color: #223258;
-      --cyan-glow: #06b6d4;
-      --emerald-accent: #10b981;
-      --amber-accent: #f59e0b;
-      --danger-accent: #f43f5e;
-      --text-main: #f1f5f9;
-      --text-muted: #94a3b8;
+      --bg: #060913;
+      --panel: #0d1424;
+      --card-bg: rgba(16, 26, 48, 0.7);
+      --border: rgba(56, 189, 248, 0.16);
+      --border-glow: rgba(56, 189, 248, 0.4);
+      --cyan: #38bdf8;
+      --teal: #2dd4bf;
+      --emerald: #34d399;
+      --amber: #f59e0b;
+      --rose: #fb7185;
+      --text: #f8fafc;
+      --muted: #94a3b8;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, sans-serif;
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
     }
 
     body {
-      background-color: var(--bg-main);
-      color: var(--text-main);
-      padding-bottom: 50px;
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.1) 0px, transparent 55%),
+        radial-gradient(at 100% 100%, rgba(45, 212, 191, 0.08) 0px, transparent 55%);
+      color: var(--text);
+      padding-bottom: 60px;
       min-height: 100vh;
     }
 
+    /* Top Futuristic Header */
     .top-header {
-      background: linear-gradient(135deg, #091328 0%, #172554 50%, #0369a1 100%);
-      border-bottom: 2px solid var(--cyan-glow);
-      color: #ffffff;
+      background: rgba(10, 17, 32, 0.9);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      padding: 24px 20px;
       text-align: center;
-      padding: 24px 16px 20px 16px;
-      box-shadow: 0 4px 20px rgba(6, 182, 212, 0.2);
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
 
     .top-header h1 {
       font-size: 1.85rem;
       font-weight: 800;
-      letter-spacing: 0.5px;
-      display: flex;
+      letter-spacing: 0.8px;
+      background: linear-gradient(135deg, #ffffff 40%, var(--cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: inline-flex;
       align-items: center;
-      justify-content: center;
       gap: 10px;
-      text-shadow: 0 0 16px rgba(6, 182, 212, 0.4);
     }
 
     .top-header p {
-      font-size: 0.95rem;
-      margin-top: 6px;
-      color: #bae6fd;
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin-top: 4px;
+      letter-spacing: 0.3px;
     }
 
-    .top-header .dev-tag {
-      font-size: 0.8rem;
-      margin-top: 10px;
-      font-weight: 600;
-      background: rgba(6, 182, 212, 0.15);
-      border: 1px solid rgba(6, 182, 212, 0.4);
+    .team-badge {
       display: inline-block;
-      padding: 5px 18px;
+      margin-top: 8px;
+      padding: 4px 18px;
+      background: rgba(56, 189, 248, 0.08);
+      border: 1px solid rgba(56, 189, 248, 0.28);
       border-radius: 20px;
-      color: #e0f2fe;
+      font-size: 0.78rem;
+      color: #bae6fd;
+      font-weight: 600;
     }
 
+    /* Modern Navigation Bar */
     .nav-bar {
-      background: #0f172a;
       display: flex;
       justify-content: center;
-      gap: 12px;
-      padding: 10px 16px;
-      border-bottom: 1px solid var(--border-color);
+      gap: 8px;
+      padding: 12px 16px;
+      background: rgba(6, 9, 19, 0.75);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
       flex-wrap: wrap;
     }
 
     .nav-btn {
-      background: #1e293b;
-      border: 1px solid var(--border-color);
-      color: #cbd5e1;
-      padding: 9px 22px;
+      background: rgba(26, 38, 64, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--muted);
+      padding: 9px 20px;
       border-radius: 8px;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       font-weight: 600;
       cursor: pointer;
-      display: flex;
+      display: inline-flex;
       align-items: center;
       gap: 8px;
       transition: all 0.25s ease;
     }
 
     .nav-btn:hover {
-      background: #334155;
+      background: rgba(56, 189, 248, 0.15);
       color: #fff;
-      border-color: var(--cyan-glow);
+      border-color: var(--cyan);
     }
 
     .nav-btn.active {
-      background: linear-gradient(135deg, var(--cyan-glow), #0284c7);
-      color: #04101e;
-      border-color: var(--cyan-glow);
-      box-shadow: 0 0 14px rgba(6, 182, 212, 0.4);
+      background: var(--cyan);
+      color: #060913;
+      border-color: var(--cyan);
+      box-shadow: 0 0 16px rgba(56, 189, 248, 0.35);
       font-weight: 700;
     }
 
     .main-container {
-      max-width: 1080px;
-      margin: 22px auto;
+      max-width: 1100px;
+      margin: 24px auto;
       padding: 0 16px;
     }
 
+    /* Live Telemetry Banner */
     .status-banner {
-      background: var(--panel-bg);
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-left: 5px solid var(--emerald);
       border-radius: 12px;
       padding: 16px 22px;
-      margin-bottom: 18px;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.25);
-      border: 1px solid var(--border-color);
-      border-left: 5px solid var(--emerald-accent);
+      margin-bottom: 20px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       flex-wrap: wrap;
       gap: 12px;
-      transition: all 0.3s ease;
+      transition: all 0.3s;
     }
 
     .status-banner.tampered {
-      border-left-color: var(--danger-accent) !important;
-      background: rgba(244, 63, 94, 0.12) !important;
+      border-left-color: var(--rose) !important;
+      background: rgba(251, 113, 133, 0.1) !important;
+      border-color: var(--rose) !important;
       animation: alertPulse 1.2s infinite ease-in-out;
     }
 
     @keyframes alertPulse {
-      0%, 100% { border-color: var(--danger-accent); }
-      50% { border-color: transparent; }
+      0%, 100% { box-shadow: 0 0 10px rgba(251, 113, 133, 0.2); }
+      50% { box-shadow: 0 0 25px rgba(251, 113, 133, 0.5); }
     }
 
     .status-banner h3 {
       font-size: 1.15rem;
-      color: #f8fafc;
+      color: #fff;
       display: flex;
       align-items: center;
       gap: 10px;
@@ -152,17 +165,19 @@
 
     .status-banner p {
       font-size: 0.85rem;
-      color: var(--emerald-accent);
+      color: var(--emerald);
       font-weight: 600;
+      margin-top: 2px;
     }
 
+    /* Input - Output Energy Flow */
     .flow-strip {
-      background: var(--panel-bg);
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
       border-radius: 12px;
       padding: 16px 20px;
-      margin-bottom: 20px;
-      border: 1px solid var(--border-color);
-      box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+      margin-bottom: 22px;
       display: grid;
       grid-template-columns: 1fr auto 1fr;
       align-items: center;
@@ -175,68 +190,70 @@
     }
 
     .flow-block {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
+      background: rgba(10, 17, 32, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.06);
       border-radius: 10px;
       padding: 14px;
     }
 
-    .flow-block.in { border-top: 3px solid var(--cyan-glow); }
-    .flow-block.out { border-top: 3px solid var(--emerald-accent); }
+    .flow-block.in { border-top: 3px solid var(--cyan); }
+    .flow-block.out { border-top: 3px solid var(--emerald); }
 
     .flow-block h4 {
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: var(--text-muted);
-      margin-bottom: 5px;
+      letter-spacing: 0.6px;
+      color: var(--muted);
+      margin-bottom: 4px;
     }
 
     .flow-block .val {
-      font-size: 1.45rem;
+      font-size: 1.5rem;
       font-weight: 800;
       color: #fff;
     }
 
     .flow-arrow {
       font-size: 1.6rem;
-      color: var(--cyan-glow);
+      color: var(--cyan);
       font-weight: bold;
-      animation: pulseFlow 1.6s infinite ease-in-out;
+      animation: flowAnim 1.6s infinite ease-in-out;
     }
 
-    @keyframes pulseFlow {
-      0%, 100% { transform: scale(1); opacity: 0.7; }
-      50% { transform: scale(1.15); opacity: 1; text-shadow: 0 0 10px var(--cyan-glow); }
+    @keyframes flowAnim {
+      0%, 100% { opacity: 0.6; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.18); text-shadow: 0 0 12px var(--cyan); }
     }
 
+    /* Grid Metric HUD Cards */
     .cards-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
       gap: 14px;
-      margin-bottom: 22px;
+      margin-bottom: 24px;
     }
 
     .param-card {
       background: var(--card-bg);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--border);
       border-radius: 12px;
       padding: 18px 16px;
-      border: 1px solid var(--border-color);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-      transition: all 0.2s ease;
+      transition: all 0.25s ease;
       position: relative;
     }
 
     .param-card:hover {
       transform: translateY(-3px);
-      border-color: rgba(6, 182, 212, 0.5);
+      border-color: var(--border-glow);
+      box-shadow: 0 8px 20px rgba(56, 189, 248, 0.12);
     }
 
     .card-title {
-      font-size: 0.78rem;
-      color: var(--text-muted);
+      font-size: 0.76rem;
+      color: var(--muted);
       text-transform: uppercase;
-      letter-spacing: 0.4px;
+      letter-spacing: 0.5px;
       display: flex;
       align-items: center;
       gap: 6px;
@@ -244,7 +261,7 @@
     }
 
     .card-value {
-      font-size: 1.65rem;
+      font-size: 1.68rem;
       font-weight: 800;
       color: #ffffff;
       margin: 10px 0 4px 0;
@@ -252,16 +269,17 @@
 
     .card-sub {
       font-size: 0.75rem;
-      color: #64748b;
+      color: var(--muted);
     }
 
+    /* Panel Boxes */
     .panel-box {
-      background: var(--panel-bg);
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
       border-radius: 14px;
       padding: 22px;
-      border: 1px solid var(--border-color);
-      box-shadow: 0 4px 14px rgba(0,0,0,0.25);
-      margin-bottom: 22px;
+      margin-bottom: 24px;
     }
 
     .panel-header {
@@ -272,16 +290,16 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      border-bottom: 1px solid var(--border-color);
-      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 12px;
     }
 
     .canvas-container {
       width: 100%;
-      background: #090e1a;
+      background: #04070f;
       border-radius: 10px;
       padding: 12px;
-      border: 1px solid #1e293b;
+      border: 1px solid rgba(255, 255, 255, 0.06);
     }
 
     canvas {
@@ -290,6 +308,7 @@
       height: 220px;
     }
 
+    /* Controls Grid */
     .controls-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -298,146 +317,66 @@
     }
 
     .control-item {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
+      background: rgba(10, 17, 32, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.06);
       border-radius: 10px;
-      padding: 14px;
+      padding: 16px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 12px;
     }
 
     .control-item span {
       font-size: 0.88rem;
       font-weight: 600;
-      color: #cbd5e1;
+      color: #e2e8f0;
     }
 
     .toggle-btn {
       width: 100%;
       padding: 11px;
-      border-radius: 6px;
+      border-radius: 7px;
       border: none;
       font-size: 0.82rem;
       font-weight: 700;
       cursor: pointer;
       letter-spacing: 0.5px;
-      transition: 0.2s;
+      transition: all 0.2s ease;
     }
 
     .btn-green {
       background: linear-gradient(135deg, #10b981, #059669);
       color: #ffffff;
-      box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.25);
     }
 
     .btn-red {
       background: linear-gradient(135deg, #f43f5e, #be123c);
       color: #ffffff;
-      box-shadow: 0 0 10px rgba(244, 63, 94, 0.3);
+      box-shadow: 0 0 12px rgba(244, 63, 94, 0.25);
     }
 
     .btn-cyan {
-      background: linear-gradient(135deg, var(--cyan-glow), #0284c7);
-      color: #04101e;
+      background: linear-gradient(135deg, #38bdf8, #0284c7);
+      color: #060913;
       font-weight: 800;
-      box-shadow: 0 0 10px rgba(6, 182, 212, 0.3);
+      box-shadow: 0 0 14px rgba(56, 189, 248, 0.3);
     }
 
     .mode-box { display: flex; gap: 10px; margin-top: 10px; }
     .mode-btn {
       flex: 1; padding: 12px; font-weight: 700; border-radius: 8px;
-      border: 1px solid var(--border-color); background: #1e293b; color: var(--text-muted); cursor: pointer;
-      transition: all 0.2s ease;
+      border: 1px solid rgba(255, 255, 255, 0.08); background: rgba(26, 38, 64, 0.6); color: var(--muted); cursor: pointer;
+      transition: all 0.2s;
     }
     .mode-btn.active-mode {
-      background: linear-gradient(135deg, var(--cyan-glow), #0284c7);
-      color: #04101e;
-      border-color: var(--cyan-glow);
+      background: var(--cyan);
+      color: #060913;
+      border-color: var(--cyan);
+      box-shadow: 0 0 14px rgba(56, 189, 248, 0.35);
     }
 
-    .report-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-    .report-table td { padding: 14px; border-bottom: 1px solid var(--border-color); font-size: 0.9rem; }
-    .report-table td:nth-child(1) { color: var(--text-muted); }
-    .report-table td:nth-child(2) { font-weight: 700; text-align: right; color: #ffffff; }
-
-    /* Admin Specific Styling */
-    .admin-form-group {
-      margin-bottom: 16px;
-      text-align: left;
-    }
-    .admin-form-group label {
-      display: block;
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      margin-bottom: 6px;
-      font-weight: 600;
-    }
-    .admin-input {
-      width: 100%;
-      background: #090e1a;
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      padding: 10px 14px;
-      color: #fff;
-      font-size: 0.95rem;
-      outline: none;
-    }
-    .admin-input:focus {
-      border-color: var(--cyan-glow);
-    }
-    .admin-login-card {
-      max-width: 420px;
-      margin: 40px auto;
-      background: var(--panel-bg);
-      border: 1px solid var(--border-color);
-      padding: 28px;
-      border-radius: 14px;
-      text-align: center;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-    }
-    .audit-log-terminal {
-      background: #070b14;
-      border: 1px solid #1e293b;
-      border-radius: 8px;
-      padding: 12px;
-      height: 160px;
-      overflow-y: auto;
-      font-family: Consolas, monospace;
-      font-size: 0.78rem;
-      color: var(--text-muted);
-      text-align: left;
-    }
-    .audit-entry { margin-bottom: 4px; }
-    .audit-entry.alert { color: var(--danger-accent); }
-    .audit-entry.info { color: var(--cyan-glow); }
-
-    .slab-card {
-      background: #090e1a;
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      padding: 12px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 8px;
-    }
-    .slab-card label {
-      font-size: 0.82rem;
-      color: #cbd5e1;
-    }
-    .slab-card input {
-      width: 90px;
-      background: #16203a;
-      border: 1px solid var(--border-color);
-      border-radius: 6px;
-      padding: 6px 10px;
-      color: #fff;
-      text-align: right;
-      font-weight: 700;
-    }
-
-    /* Team Member Cards */
+    /* Team Member Cards (Clean Look - Roles Completely Removed) */
     .team-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
@@ -446,24 +385,31 @@
     }
 
     .team-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
+      background: rgba(10, 17, 32, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 14px;
       padding: 18px;
       display: flex;
       align-items: center;
       gap: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      transition: all 0.25s ease;
+    }
+
+    .team-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--cyan);
+      box-shadow: 0 8px 20px rgba(56, 189, 248, 0.15);
     }
 
     .avatar-wrapper {
-      width: 84px;
-      height: 84px;
+      width: 82px;
+      height: 82px;
       border-radius: 50%;
-      border: 3px solid var(--cyan-glow);
+      border: 2px solid var(--cyan);
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
       overflow: hidden;
       flex-shrink: 0;
-      background: #0f172a;
+      background: #04070f;
     }
 
     .dev-avatar {
@@ -475,49 +421,138 @@
     }
 
     .dev-details h4 {
-      font-size: 1.05rem;
+      font-size: 1.08rem;
       color: #ffffff;
-      margin-bottom: 3px;
-    }
-
-    .dev-role {
-      font-size: 0.8rem;
-      color: var(--cyan-glow);
+      margin-bottom: 5px;
       font-weight: 700;
-      margin-bottom: 4px;
     }
 
     .dev-class {
-      font-size: 0.78rem;
-      color: var(--text-muted);
+      font-size: 0.82rem;
+      color: var(--cyan);
+      font-weight: 600;
+      margin-bottom: 2px;
     }
 
+    .dev-college {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    /* Admin Specific Styling */
+    .admin-login-card {
+      max-width: 420px;
+      margin: 40px auto;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      padding: 32px 28px;
+      border-radius: 16px;
+      text-align: center;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .admin-form-group {
+      margin-bottom: 16px;
+      text-align: left;
+    }
+
+    .admin-form-group label {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .admin-input {
+      width: 100%;
+      background: #04070f;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+      padding: 12px 14px;
+      color: #fff;
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    .admin-input:focus {
+      border-color: var(--cyan);
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.25);
+    }
+
+    .slab-card {
+      background: #04070f;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      padding: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .slab-card label {
+      font-size: 0.82rem;
+      color: #cbd5e1;
+    }
+
+    .slab-card input {
+      width: 90px;
+      background: rgba(26, 38, 64, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 6px;
+      padding: 6px 10px;
+      color: #fff;
+      text-align: right;
+      font-weight: 700;
+    }
+
+    .audit-log-terminal {
+      background: #04070f;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      padding: 12px;
+      height: 160px;
+      overflow-y: auto;
+      font-family: Consolas, monospace;
+      font-size: 0.78rem;
+      color: var(--muted);
+      text-align: left;
+    }
+
+    .audit-entry { margin-bottom: 4px; }
+    .audit-entry.alert { color: var(--rose); }
+    .audit-entry.info { color: var(--cyan); }
+
+    .report-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    .report-table td { padding: 14px; border-bottom: 1px solid rgba(255, 255, 255, 0.06); font-size: 0.9rem; }
+    .report-table td:nth-child(1) { color: var(--muted); }
+    .report-table td:nth-child(2) { font-weight: 700; text-align: right; color: #ffffff; }
+
     /* Page Visibility Classes */
-    .page-section {
-      display: none !important;
-    }
-    .page-section.show {
-      display: block !important;
-    }
+    .page-section { display: none !important; }
+    .page-section.show { display: block !important; }
 
     footer {
       text-align: center;
-      margin-top: 35px;
+      margin-top: 40px;
       font-size: 0.82rem;
-      color: #64748b;
+      color: var(--muted);
     }
   </style>
 </head>
 <body>
 
+  <!-- Top SCADA Banner -->
   <header class="top-header">
-    <h1>⚡ Smart Meter IoT Control Center</h1>
-    <p>Real-Time Electrical Telemetry, Anti-Tamper & Grid Management</p>
-    <div class="dev-tag">
-      Team: PATHAN MOIN | QURESHI KAIS | PATHAN HUZEFA
+    <h1>⚡ Smart Grid SCADA Terminal</h1>
+    <p>Automated Electrical Telemetry, Anti-Theft Protection & Grid Dispatch</p>
+    <div class="team-badge">
+      Team: PATHAN MOIN &bull; QURESHI KAIS &bull; PATHAN HUZEFA
     </div>
   </header>
 
+  <!-- Segmented Navigation -->
   <nav class="nav-bar">
     <button class="nav-btn active" onclick="switchTab('dashboard', this)">📊 Dashboard</button>
     <button class="nav-btn" onclick="switchTab('control', this)">🎛️ Control</button>
@@ -530,124 +565,126 @@
     <!-- 1. DASHBOARD PAGE -->
     <div id="page-dashboard" class="page-section show">
       
+      <!-- Real-time HUD Status -->
       <div class="status-banner" id="banner-box">
         <div>
-          <h3 id="grid-status-title">⚡ Normal Grid Supply</h3>
-          <p id="grid-status-sub">● All Systems Online & Tamper Guard Active</p>
+          <h3 id="grid-status-title">⚡ Grid Incomer Online</h3>
+          <p id="grid-status-sub">&bull; Continuous Line Telemetry Synced</p>
         </div>
-        <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted);">
-          Tamper Status: <span id="dash-tamper-text" style="color: var(--emerald-accent);">SECURED (NO TAMPER)</span>
+        <div style="font-size: 0.85rem; font-weight: 600; color: var(--muted);">
+          Tamper State: <span id="dash-tamper-text" style="color: var(--emerald);">SECURED (NORMAL)</span>
         </div>
       </div>
 
+      <!-- Live Input-Output Line Vector -->
       <div class="flow-strip">
         <div class="flow-block in">
           <h4>⚡ Input Line (Grid Incomer)</h4>
-          <div class="val" id="disp-in-v" style="color: var(--cyan-glow);">230.2 V</div>
-          <small style="color: var(--text-muted);">Freq: 50.0 Hz | Phase: Single Phase AC</small>
+          <div class="val" id="disp-in-v" style="color: var(--cyan);">230.2 V</div>
+          <small style="color: var(--muted);">Freq: 50.0 Hz &bull; Single Phase AC RMS</small>
         </div>
         <div class="flow-arrow" id="flow-arrow">⮞ ⮞ ⮞</div>
         <div class="flow-block out">
           <h4>🔌 Output Line (Consumer Load)</h4>
-          <div class="val" id="disp-out-p" style="color: var(--emerald-accent);">370 W</div>
-          <small style="color: var(--text-muted);">Current: <span id="disp-out-i">1.61</span> A | Power Factor: 0.98</small>
+          <div class="val" id="disp-out-p" style="color: var(--emerald);">370 W</div>
+          <small style="color: var(--muted);">Current: <span id="disp-out-i">1.61</span> A &bull; Power Factor: 0.98</small>
         </div>
       </div>
 
+      <!-- Parameter HUD Cards -->
       <div class="cards-grid">
         <div class="param-card">
           <div class="card-title">⚡ Line Voltage</div>
-          <div class="card-value" id="val-v" style="color: var(--cyan-glow);">230.2 V</div>
+          <div class="card-value" id="val-v" style="color: var(--cyan);">230.2 V</div>
           <div class="card-sub">RMS Potential</div>
         </div>
 
         <div class="param-card">
-          <div class="card-title">💡 Load Current</div>
-          <div class="card-value" id="val-i" style="color: #38bdf8;">1.61 A</div>
-          <div class="card-sub">Drawn Current</div>
+          <div class="card-title">💡 Drawn Current</div>
+          <div class="card-value" id="val-i" style="color: #67e8f9;">1.61 A</div>
+          <div class="card-sub">Active Line Current</div>
         </div>
 
         <div class="param-card">
           <div class="card-title">🔥 Active Power</div>
-          <div class="card-value" id="val-p" style="color: var(--amber-accent);">370 W</div>
-          <div class="card-sub">Real Power (P = V × I)</div>
+          <div class="card-value" id="val-p" style="color: var(--amber);">370 W</div>
+          <div class="card-sub">Real Power (P = V &times; I)</div>
         </div>
 
         <div class="param-card">
-          <div class="card-title">🛡️ Anti-Tamper State</div>
-          <div class="card-value" id="val-tamper" style="color: var(--emerald-accent); font-size: 1.35rem;">SECURED</div>
-          <div class="card-sub">Hardware Enclosure Guard</div>
+          <div class="card-title">🛡️ Anti-Tamper Status</div>
+          <div class="card-value" id="val-tamper" style="color: var(--emerald); font-size: 1.35rem;">SECURED</div>
+          <div class="card-sub">Hardware Enclosure Loop</div>
         </div>
 
         <div class="param-card">
           <div class="card-title">💰 Live Bill Due</div>
-          <div class="card-value" id="val-cost" style="color: var(--danger-accent);">₹ 0.00</div>
-          <div class="card-sub" id="dash-tariff-label">Slab-Wise Telescopic Billing</div>
+          <div class="card-value" id="val-cost" style="color: var(--rose);">₹ 0.00</div>
+          <div class="card-sub" id="dash-tariff-label">Telescopic Slab Tariff</div>
         </div>
 
         <div class="param-card">
           <div class="card-title">💳 Prepaid Wallet</div>
-          <div class="card-value" id="val-wallet" style="color: var(--emerald-accent);">₹ 250.00</div>
-          <div class="card-sub">Auto-trip at ₹0</div>
+          <div class="card-value" id="val-wallet" style="color: var(--emerald);">₹ 250.00</div>
+          <div class="card-sub">Auto-cutoff at ₹0.00</div>
         </div>
 
         <div class="param-card">
           <div class="card-title">🌐 Grid Frequency</div>
           <div class="card-value" id="val-freq">50.0 Hz</div>
-          <div class="card-sub">AC Synchronization</div>
+          <div class="card-sub">Synchronized Incomer</div>
         </div>
 
         <div class="param-card">
           <div class="card-title">🌿 Carbon Footprint</div>
-          <div class="card-value" id="val-co2" style="color: #34d399;">0.00 kg</div>
-          <div class="card-sub">Emission: 0.82 kg/kWh</div>
+          <div class="card-value" id="val-co2" style="color: var(--emerald);">0.00 kg</div>
+          <div class="card-sub">Factor: 0.82 kg/kWh</div>
         </div>
       </div>
 
+      <!-- Real-Time Waveform Graph -->
       <div class="panel-box">
-        <div class="panel-header">📈 Real-Time Output Load Curve (Telemetry Stream)</div>
+        <div class="panel-header">📈 Live Power Consumption Curve (Output Stream)</div>
         <div class="canvas-container">
           <canvas id="powerChart" width="1000" height="220"></canvas>
         </div>
       </div>
 
+      <!-- Team Members on Dashboard (Clean Typography, No Role) -->
       <div class="panel-box">
         <div class="panel-header">👥 Project Developers & Team Members</div>
         <div class="team-grid">
           
           <div class="team-card">
             <div class="avatar-wrapper">
-              <img class="dev-avatar" src="moin.jpg?v=7" onerror="this.onerror=null; this.src='image_2.png';" alt="Pathan Moin">
+              <img class="dev-avatar" src="moin.jpg?v=9" onerror="this.onerror=null; this.src='image_2.png';" alt="Pathan Moin">
             </div>
             <div class="dev-details">
               <h4>Pathan Moin M.</h4>
-              <div class="dev-role">System Architect & IoT Lead</div>
               <div class="dev-class">B.Sc. (Computer Application)</div>
-              <div class="dev-class">S.M.B.S.T. College Sangamner</div>
+              <div class="dev-college">S.M.B.S.T. College Sangamner</div>
             </div>
           </div>
 
           <div class="team-card">
             <div class="avatar-wrapper">
-              <img class="dev-avatar" src="kais.jpg?v=7" onerror="this.onerror=null; this.src='kais.png';" alt="Qureshi Kais">
+              <img class="dev-avatar" src="kais.jpg?v=9" onerror="this.onerror=null; this.src='kais.png';" alt="Qureshi Kais">
             </div>
             <div class="dev-details">
               <h4>Qureshi Kais Amjad</h4>
-              <div class="dev-role">Frontend & Dashboard Lead</div>
               <div class="dev-class">B.Sc. (Computer Application)</div>
-              <div class="dev-class">S.M.B.S.T. College Sangamner</div>
+              <div class="dev-college">S.M.B.S.T. College Sangamner</div>
             </div>
           </div>
 
           <div class="team-card">
             <div class="avatar-wrapper">
-              <img class="dev-avatar" src="huzefa.jpg?v=7" onerror="this.onerror=null; this.src='huzefa.png';" alt="Pathan Huzefa">
+              <img class="dev-avatar" src="huzefa.jpg?v=9" onerror="this.onerror=null; this.src='huzefa.png';" alt="Pathan Huzefa">
             </div>
             <div class="dev-details">
               <h4>Pathan Huzefa Naim</h4>
-              <div class="dev-role">Hardware & Testing Lead</div>
               <div class="dev-class">B.Sc. (Computer Application)</div>
-              <div class="dev-class">S.M.B.S.T. College Sangamner</div>
+              <div class="dev-college">S.M.B.S.T. College Sangamner</div>
             </div>
           </div>
 
@@ -657,9 +694,9 @@
 
     <!-- 2. CONTROL PAGE -->
     <div id="page-control" class="page-section">
-      <div class="panel-box" style="border: 1px solid var(--danger-accent);">
-        <div class="panel-header" style="color: var(--danger-accent);">🚨 Anti-Tamper & Security Control Unit</div>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 14px;">
+      <div class="panel-box" style="border-color: var(--rose);">
+        <div class="panel-header" style="color: var(--rose);">🚨 Hardware Anti-Tamper Simulation</div>
+        <p style="font-size: 0.85rem; color: var(--muted); margin-bottom: 14px;">
           Simulate illegal electricity theft, current bypass, or enclosure seal tampering. When triggered, the system isolates the consumer load line immediately.
         </p>
         <div style="display: flex; gap: 12px; flex-wrap: wrap;">
@@ -703,7 +740,7 @@
           </div>
         </div>
 
-        <div class="panel-header" style="margin-top: 24px;">⚙️ Grid Automation Mode</div>
+        <div class="panel-header" style="margin-top: 24px;">⚙ Dispatch Operating Mode</div>
         <div class="mode-box">
           <button id="mode-auto" class="mode-btn active-mode" onclick="setMode('AUTO')">AUTO MODE</button>
           <button id="mode-manual" class="mode-btn" onclick="setMode('MANUAL')">MANUAL OVERRIDE</button>
@@ -719,7 +756,7 @@
         <table class="report-table">
           <tr>
             <td>Maximum Peak Power Recorded</td>
-            <td id="rep-peak" style="color: var(--amber-accent);">370 W</td>
+            <td id="rep-peak" style="color: var(--amber);">370 W</td>
           </tr>
           <tr>
             <td>Average Load Consumption</td>
@@ -727,19 +764,19 @@
           </tr>
           <tr>
             <td>Total Energy Consumed</td>
-            <td id="rep-energy" style="color: var(--cyan-glow);">0.000 Wh</td>
+            <td id="rep-energy" style="color: var(--cyan);">0.000 Wh</td>
           </tr>
           <tr>
             <td>Estimated Billing Cost</td>
-            <td id="rep-cost" style="color: var(--danger-accent);">₹ 0.00</td>
+            <td id="rep-cost" style="color: var(--rose);">₹ 0.00</td>
           </tr>
           <tr>
             <td>Tariff Structure (Telescopic)</td>
-            <td id="rep-tariff-rate">1-100: ₹4.50 | 101-200: ₹7.50 | >200: ₹11.00</td>
+            <td id="rep-tariff-rate">1-100: ₹4.50 | 101-200: ₹7.50 | &gt;200: ₹11.00</td>
           </tr>
           <tr>
             <td>Tamper Sensor Status</td>
-            <td id="rep-tamper" style="color: var(--emerald-accent);">SECURED (NO VIOLATION)</td>
+            <td id="rep-tamper" style="color: var(--emerald);">SECURED (NO VIOLATION)</td>
           </tr>
           <tr>
             <td>Sanctioned Load Capacity</td>
@@ -751,7 +788,7 @@
           </tr>
           <tr>
             <td>Main Contactor / Relay Status</td>
-            <td id="rep-relay" style="color: var(--emerald-accent);">CLOSED (NORMAL)</td>
+            <td id="rep-relay" style="color: var(--emerald);">CLOSED (NORMAL)</td>
           </tr>
           <tr>
             <td>Microcontroller Core</td>
@@ -759,29 +796,70 @@
           </tr>
         </table>
       </div>
+
+      <!-- Developer Info in Report Tab (Without Role) -->
+      <div class="panel-box">
+        <div class="panel-header">👥 Project Developers & Team Members</div>
+        <div class="team-grid">
+          
+          <div class="team-card">
+            <div class="avatar-wrapper">
+              <img class="dev-avatar" src="moin.jpg?v=9" onerror="this.onerror=null; this.src='image_2.png';" alt="Pathan Moin">
+            </div>
+            <div class="dev-details">
+              <h4>Pathan Moin M.</h4>
+              <div class="dev-class">B.Sc. (Computer Application)</div>
+              <div class="dev-college">S.M.B.S.T. College Sangamner</div>
+            </div>
+          </div>
+
+          <div class="team-card">
+            <div class="avatar-wrapper">
+              <img class="dev-avatar" src="kais.jpg?v=9" onerror="this.onerror=null; this.src='kais.png';" alt="Qureshi Kais">
+            </div>
+            <div class="dev-details">
+              <h4>Qureshi Kais Amjad</h4>
+              <div class="dev-class">B.Sc. (Computer Application)</div>
+              <div class="dev-college">S.M.B.S.T. College Sangamner</div>
+            </div>
+          </div>
+
+          <div class="team-card">
+            <div class="avatar-wrapper">
+              <img class="dev-avatar" src="huzefa.jpg?v=9" onerror="this.onerror=null; this.src='huzefa.png';" alt="Pathan Huzefa">
+            </div>
+            <div class="dev-details">
+              <h4>Pathan Huzefa Naim</h4>
+              <div class="dev-class">B.Sc. (Computer Application)</div>
+              <div class="dev-college">S.M.B.S.T. College Sangamner</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
     </div>
 
     <!-- 4. ADMIN PORTAL (DISCOM UTILITY PANEL) -->
     <div id="page-admin" class="page-section">
       
-      <!-- Admin Login Form (No Default Password Displayed) -->
+      <!-- Secure Admin Gate (No Default Password Hint) -->
       <div id="admin-login-box" class="admin-login-card">
         <div style="font-size: 2.2rem; margin-bottom: 8px;">🔐</div>
         <h3 style="color: #fff; margin-bottom: 4px;">DISCOM Officer Authorization</h3>
-        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 20px;">Restricted Access: Authorized Grid Personnel Only</p>
+        <p style="font-size: 0.8rem; color: var(--muted); margin-bottom: 20px;">Restricted Access: Authorized Grid Personnel Only</p>
         
         <div class="admin-form-group">
           <label for="admin-passcode">Enter Security PIN:</label>
           <input type="password" id="admin-passcode" class="admin-input" placeholder="••••••••" autocomplete="off">
         </div>
         <button class="toggle-btn btn-cyan" onclick="loginAdmin()">UNLOCK UTILITY PANEL</button>
-        <p id="admin-login-err" style="color: var(--danger-accent); font-size: 0.78rem; margin-top: 10px; display: none;">Invalid Passcode! Access Denied.</p>
+        <p id="admin-login-err" style="color: var(--rose); font-size: 0.78rem; margin-top: 10px; display: none;">Invalid Passcode! Access Denied.</p>
       </div>
 
       <!-- Admin Management Console -->
       <div id="admin-console" style="display: none;">
         
-        <div class="panel-box" style="border-top: 3px solid var(--cyan-glow);">
+        <div class="panel-box" style="border-top: 3px solid var(--cyan);">
           <div class="panel-header" style="justify-content: space-between;">
             <span>⚡ DISCOM Smart Grid Officer Controls</span>
             <button class="toggle-btn btn-red" style="width: auto; padding: 6px 16px;" onclick="logoutAdmin()">LOCK SESSION</button>
@@ -790,7 +868,7 @@
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 16px;">
             
             <!-- Telescopic Slab-Wise Tariff Manager -->
-            <div class="control-item" style="grid-column: span 1;">
+            <div class="control-item">
               <span>Telescopic Slab Tariff Structure (₹ / Unit)</span>
               
               <div class="slab-card">
@@ -814,7 +892,7 @@
             <!-- Sanctioned Load -->
             <div class="control-item">
               <span>Sanctioned Load Limit (Watts)</span>
-              <p style="font-size: 0.75rem; color: var(--text-muted);">Set maximum permitted household demand</p>
+              <p style="font-size: 0.75rem; color: var(--muted);">Set maximum permitted household demand</p>
               <input type="number" id="adm-load-limit" class="admin-input" value="3500" step="500">
               <button class="toggle-btn btn-cyan" onclick="updateLoadLimit()">UPDATE LOAD LIMIT</button>
             </div>
@@ -822,14 +900,14 @@
             <!-- Remote Utility Breaker -->
             <div class="control-item">
               <span>DISCOM Remote Grid Cutoff</span>
-              <p style="font-size: 0.75rem; color: var(--text-muted);">Force isolate line from central substation</p>
+              <p style="font-size: 0.75rem; color: var(--muted);">Force isolate line from central substation</p>
               <button id="adm-grid-trip-btn" class="toggle-btn btn-red" onclick="adminForceTrip()">REMOTE LINE CUTOFF</button>
             </div>
 
             <!-- Reset Registers -->
             <div class="control-item">
               <span>Reset Energy kWh Registers</span>
-              <p style="font-size: 0.75rem; color: var(--text-muted);">Zero out meter counters for next cycle</p>
+              <p style="font-size: 0.75rem; color: var(--muted);">Zero out meter counters for next cycle</p>
               <button class="toggle-btn btn-green" onclick="adminResetRegisters()">RESET TO 0.00 kWh</button>
             </div>
 
@@ -852,7 +930,7 @@
 
   <footer>
     <p>Smart Electricity Meter Monitoring & Telemetry Control System &copy; 2026-27</p>
-    <p style="margin-top: 4px; color: #475569;">S.M.B.S.T. College Sangamner | Savitribai Phule Pune University</p>
+    <p style="margin-top: 4px; color: var(--muted);">S.M.B.S.T. College Sangamner | Savitribai Phule Pune University</p>
   </footer>
 
   <script>
@@ -865,11 +943,10 @@
     let accumulatedWh = 0.00;
     let maxPermittedWatts = 3500;
 
-    // Multi-Slab Tariff Structure
     let tariffSlabs = {
-      slab1: 4.50,  // 1 - 100 units
-      slab2: 7.50,  // 101 - 200 units
-      slab3: 11.00  // 201 - 1000 units
+      slab1: 4.50,
+      slab2: 7.50,
+      slab3: 11.00
     };
 
     const apps = {
@@ -888,7 +965,6 @@
     const canvas = document.getElementById('powerChart');
     const ctx = canvas.getContext('2d');
 
-    // Telescopic Tariff Calculation (Real Discom Logic)
     function calculateTelescopicCost(totalKwh) {
       let cost = 0;
       if (totalKwh <= 100) {
@@ -988,7 +1064,7 @@
         totalWatts = 0;
         document.getElementById('grid-status-title').innerText = '🛑 Substation Remote Cutoff';
         document.getElementById('grid-status-sub').innerText = '● Line Isolated by DISCOM Substation Admin';
-        document.getElementById('grid-status-sub').style.color = 'var(--danger-accent)';
+        document.getElementById('grid-status-sub').style.color = 'var(--rose)';
         logAudit('CRITICAL: Substation Remotely Disconnected Consumer Line.', true);
       } else {
         btn.innerText = 'REMOTE LINE CUTOFF';
@@ -1034,23 +1110,23 @@
       banner.classList.add('tampered');
       document.getElementById('grid-status-title').innerText = '🚨 CRITICAL TAMPER DETECTED!';
       document.getElementById('grid-status-sub').innerText = '● Illegal Bypass / Enclosure Breached! Line Isolated.';
-      document.getElementById('grid-status-sub').style.color = 'var(--danger-accent)';
+      document.getElementById('grid-status-sub').style.color = 'var(--rose)';
       
       document.getElementById('dash-tamper-text').innerText = 'VIOLATION DETECTED';
-      document.getElementById('dash-tamper-text').style.color = 'var(--danger-accent)';
+      document.getElementById('dash-tamper-text').style.color = 'var(--rose)';
 
       document.getElementById('val-tamper').innerText = 'TAMPERED';
-      document.getElementById('val-tamper').style.color = 'var(--danger-accent)';
+      document.getElementById('val-tamper').style.color = 'var(--rose)';
 
       document.getElementById('rep-tamper').innerText = 'CRITICAL VIOLATION DETECTED (AUTO-SHUTDOWN)';
-      document.getElementById('rep-tamper').style.color = 'var(--danger-accent)';
+      document.getElementById('rep-tamper').style.color = 'var(--rose)';
 
       document.getElementById('ctrl-main').className = 'toggle-btn btn-red';
       document.getElementById('ctrl-main').innerText = 'LINE ISOLATED';
       document.getElementById('flow-arrow').innerText = '✖ TAMPER CUT ✖';
-      document.getElementById('flow-arrow').style.color = 'var(--danger-accent)';
+      document.getElementById('flow-arrow').style.color = 'var(--rose)';
       document.getElementById('rep-relay').innerText = 'OPEN (TAMPER SHUTDOWN)';
-      document.getElementById('rep-relay').style.color = 'var(--danger-accent)';
+      document.getElementById('rep-relay').style.color = 'var(--rose)';
 
       logAudit('SECURITY ALERT: Hardware Enclosure Tamper Triggered!', true);
       alert('⚠️ SMART METER ALERT!\nTampering Detected: Neutral line bypass or magnetic interference detected.\nContactor opened automatically.');
@@ -1066,25 +1142,25 @@
 
       const banner = document.getElementById('banner-box');
       banner.classList.remove('tampered');
-      document.getElementById('grid-status-title').innerText = '⚡ Normal Grid Supply';
-      document.getElementById('grid-status-sub').innerText = '● All Systems Online & Tamper Guard Active';
-      document.getElementById('grid-status-sub').style.color = 'var(--emerald-accent)';
+      document.getElementById('grid-status-title').innerText = '⚡ Grid Incomer Online';
+      document.getElementById('grid-status-sub').innerText = '● Continuous Line Telemetry Synced';
+      document.getElementById('grid-status-sub').style.color = 'var(--emerald)';
 
-      document.getElementById('dash-tamper-text').innerText = 'SECURED (NO TAMPER)';
-      document.getElementById('dash-tamper-text').style.color = 'var(--emerald-accent)';
+      document.getElementById('dash-tamper-text').innerText = 'SECURED (NORMAL)';
+      document.getElementById('dash-tamper-text').style.color = 'var(--emerald)';
 
       document.getElementById('val-tamper').innerText = 'SECURED';
-      document.getElementById('val-tamper').style.color = 'var(--emerald-accent)';
+      document.getElementById('val-tamper').style.color = 'var(--emerald)';
 
       document.getElementById('rep-tamper').innerText = 'SECURED (NO VIOLATION)';
-      document.getElementById('rep-tamper').style.color = 'var(--emerald-accent)';
+      document.getElementById('rep-tamper').style.color = 'var(--emerald)';
 
       document.getElementById('ctrl-main').className = 'toggle-btn btn-green';
       document.getElementById('ctrl-main').innerText = 'SYSTEM ONLINE';
       document.getElementById('flow-arrow').innerText = '⮞ ⮞ ⮞';
-      document.getElementById('flow-arrow').style.color = 'var(--cyan-glow)';
+      document.getElementById('flow-arrow').style.color = 'var(--cyan)';
       document.getElementById('rep-relay').innerText = 'CLOSED (NORMAL)';
-      document.getElementById('rep-relay').style.color = 'var(--emerald-accent)';
+      document.getElementById('rep-relay').style.color = 'var(--emerald)';
 
       logAudit('Tamper Alarm Cleared. System Restored to Normal.');
       calcTotalWatts();
@@ -1106,23 +1182,23 @@
         btn.className = 'toggle-btn btn-green';
         btn.innerText = 'SYSTEM ONLINE';
         arrow.innerText = '⮞ ⮞ ⮞';
-        arrow.style.color = 'var(--cyan-glow)';
-        bannerTitle.innerText = '⚡ Normal Grid Supply';
-        bannerSub.innerText = '● All Systems Online & Tamper Guard Active';
-        bannerSub.style.color = 'var(--emerald-accent)';
+        arrow.style.color = 'var(--cyan)';
+        bannerTitle.innerText = '⚡ Grid Incomer Online';
+        bannerSub.innerText = '● Continuous Line Telemetry Synced';
+        bannerSub.style.color = 'var(--emerald)';
         document.getElementById('rep-relay').innerText = 'CLOSED (NORMAL)';
-        document.getElementById('rep-relay').style.color = 'var(--emerald-accent)';
+        document.getElementById('rep-relay').style.color = 'var(--emerald)';
         calcTotalWatts();
       } else {
         btn.className = 'toggle-btn btn-red';
         btn.innerText = 'SYSTEM TRIPPED';
         arrow.innerText = '✖ LINE CUT ✖';
-        arrow.style.color = 'var(--danger-accent)';
+        arrow.style.color = 'var(--rose)';
         bannerTitle.innerText = '🛑 Main Breaker Tripped';
         bannerSub.innerText = '● Output Line Disconnected';
-        bannerSub.style.color = 'var(--danger-accent)';
+        bannerSub.style.color = 'var(--rose)';
         document.getElementById('rep-relay').innerText = 'OPEN (TRIPPED)';
-        document.getElementById('rep-relay').style.color = 'var(--danger-accent)';
+        document.getElementById('rep-relay').style.color = 'var(--rose)';
         totalWatts = 0;
       }
     }
@@ -1154,7 +1230,7 @@
       totalWatts = sum;
 
       if (totalWatts > maxPermittedWatts) {
-        logAudit(`OVERLOAD WARNING: Load ${totalWatts}W exceeded sanctioned limit of ${maxPermittedWatts}W!`, true);
+        logAudit(`OVERLOAD WARNING: Load ${totalWatts}W exceeded limit of ${maxPermittedWatts}W!`, true);
       }
       if (totalWatts > peakPower) peakPower = totalWatts;
     }
@@ -1162,7 +1238,7 @@
     function drawChart() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      ctx.strokeStyle = '#1e293b';
+      ctx.strokeStyle = '#1a2640';
       ctx.lineWidth = 1;
       for (let y = 30; y < canvas.height; y += 45) {
         ctx.beginPath();
@@ -1172,9 +1248,9 @@
       }
 
       ctx.beginPath();
-      ctx.strokeStyle = isTampered ? '#f43f5e' : '#06b6d4';
+      ctx.strokeStyle = isTampered ? '#fb7185' : '#38bdf8';
       ctx.lineWidth = 3;
-      ctx.shadowColor = isTampered ? '#f43f5e' : '#06b6d4';
+      ctx.shadowColor = isTampered ? '#fb7185' : '#38bdf8';
       ctx.shadowBlur = 10;
       const step = canvas.width / (graphHistory.length - 1);
       const maxWatt = 3800;
@@ -1192,11 +1268,11 @@
       ctx.lineTo(0, canvas.height);
       const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
       if (isTampered) {
-        gradient.addColorStop(0, 'rgba(244, 63, 94, 0.25)');
-        gradient.addColorStop(1, 'rgba(244, 63, 94, 0.0)');
+        gradient.addColorStop(0, 'rgba(251, 113, 133, 0.25)');
+        gradient.addColorStop(1, 'rgba(251, 113, 133, 0.0)');
       } else {
-        gradient.addColorStop(0, 'rgba(6, 182, 212, 0.25)');
-        gradient.addColorStop(1, 'rgba(6, 182, 212, 0.0)');
+        gradient.addColorStop(0, 'rgba(56, 189, 248, 0.25)');
+        gradient.addColorStop(1, 'rgba(56, 189, 248, 0.0)');
       }
       ctx.fillStyle = gradient;
       ctx.fill();
@@ -1210,13 +1286,9 @@
         const whSec = (totalWatts / 3600);
         accumulatedWh += whSec;
 
-        // Current unit consumption
         const currentKwh = accumulatedWh / 1000;
-        
-        // Telescopic Billing Calculation
         const totalBillCost = calculateTelescopicCost(currentKwh);
 
-        // Deduct from prepaid balance incrementally
         const ratePerSec = (totalWatts / 3600000) * (currentKwh <= 100 ? tariffSlabs.slab1 : (currentKwh <= 200 ? tariffSlabs.slab2 : tariffSlabs.slab3));
         walletBalance = Math.max(0, walletBalance - ratePerSec);
 
@@ -1245,7 +1317,7 @@
       graphHistory.push(displayWatts);
       drawChart();
 
-      document.getElementById('disp-in-v').innerText = (isSystemOn && !isTampered && !isAdminForceCut ? v.toFixed(1) + ' V' : '230.0 V (Grid Ready)');
+      document.getElementById('disp-in-v').innerText = (isSystemOn && !isTampered && !isAdminForceCut ? v.toFixed(1) + ' V' : '230.0 V (Standby)');
       document.getElementById('disp-out-p').innerText = totalWatts + ' W';
       document.getElementById('disp-out-i').innerText = i.toFixed(2);
 

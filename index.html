@@ -5,225 +5,283 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Smart Meter IoT Control Center</title>
   <style>
+    :root {
+      --bg-main: #0a0f1d;
+      --panel-bg: #11192e;
+      --card-bg: #16203a;
+      --border-color: #223258;
+      --cyan-glow: #06b6d4;
+      --emerald-accent: #10b981;
+      --amber-accent: #f59e0b;
+      --danger-accent: #f43f5e;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, sans-serif;
     }
 
     body {
-      background-color: #f0f4f8;
-      color: #334155;
-      padding-bottom: 40px;
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      padding-bottom: 50px;
+      min-height: 100vh;
     }
 
     .top-header {
-      background: linear-gradient(135deg, #f59e0b, #d97706);
+      background: linear-gradient(135deg, #091328 0%, #172554 50%, #0369a1 100%);
+      border-bottom: 2px solid var(--cyan-glow);
       color: #ffffff;
       text-align: center;
       padding: 24px 16px 20px 16px;
-      box-shadow: 0 4px 12px rgba(217, 119, 6, 0.25);
+      box-shadow: 0 4px 20px rgba(6, 182, 212, 0.2);
     }
 
     .top-header h1 {
-      font-size: 1.8rem;
-      font-weight: 700;
+      font-size: 1.85rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      gap: 10px;
+      text-shadow: 0 0 16px rgba(6, 182, 212, 0.4);
     }
 
     .top-header p {
       font-size: 0.95rem;
-      margin-top: 4px;
-      opacity: 0.95;
+      margin-top: 6px;
+      color: #bae6fd;
     }
 
     .top-header .dev-tag {
-      font-size: 0.82rem;
-      margin-top: 8px;
-      font-weight: 500;
-      background: rgba(0, 0, 0, 0.18);
+      font-size: 0.8rem;
+      margin-top: 10px;
+      font-weight: 600;
+      background: rgba(6, 182, 212, 0.15);
+      border: 1px solid rgba(6, 182, 212, 0.4);
       display: inline-block;
-      padding: 5px 16px;
+      padding: 5px 18px;
       border-radius: 20px;
-      letter-spacing: 0.3px;
+      color: #e0f2fe;
     }
 
     .nav-bar {
-      background: #1e293b;
+      background: #0f172a;
       display: flex;
       justify-content: center;
       gap: 12px;
-      padding: 8px 16px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border-color);
+      flex-wrap: wrap;
     }
 
     .nav-btn {
-      background: transparent;
-      border: 1px solid #475569;
+      background: #1e293b;
+      border: 1px solid var(--border-color);
       color: #cbd5e1;
-      padding: 8px 22px;
-      border-radius: 6px;
+      padding: 9px 22px;
+      border-radius: 8px;
       font-size: 0.9rem;
       font-weight: 600;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 6px;
-      transition: all 0.2s ease;
+      gap: 8px;
+      transition: all 0.25s ease;
     }
 
     .nav-btn:hover {
       background: #334155;
       color: #fff;
+      border-color: var(--cyan-glow);
     }
 
     .nav-btn.active {
-      background: #ffffff;
-      color: #0f172a;
-      border-color: #ffffff;
+      background: linear-gradient(135deg, var(--cyan-glow), #0284c7);
+      color: #04101e;
+      border-color: var(--cyan-glow);
+      box-shadow: 0 0 14px rgba(6, 182, 212, 0.4);
+      font-weight: 700;
     }
 
     .main-container {
-      max-width: 1050px;
-      margin: 20px auto;
+      max-width: 1080px;
+      margin: 22px auto;
       padding: 0 16px;
     }
 
     .status-banner {
-      background: #ffffff;
+      background: var(--panel-bg);
       border-radius: 12px;
-      padding: 16px 20px;
+      padding: 16px 22px;
       margin-bottom: 18px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-      border-left: 5px solid #10b981;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+      border: 1px solid var(--border-color);
+      border-left: 5px solid var(--emerald-accent);
       display: flex;
       align-items: center;
       justify-content: space-between;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .status-banner.tampered {
+      border-left-color: var(--danger-accent) !important;
+      background: rgba(244, 63, 94, 0.12) !important;
+      animation: alertPulse 1.2s infinite ease-in-out;
+    }
+
+    @keyframes alertPulse {
+      0%, 100% { border-color: var(--danger-accent); }
+      50% { border-color: transparent; }
     }
 
     .status-banner h3 {
       font-size: 1.15rem;
-      color: #1e293b;
+      color: #f8fafc;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
     }
 
     .status-banner p {
       font-size: 0.85rem;
-      color: #10b981;
+      color: var(--emerald-accent);
       font-weight: 600;
     }
 
     .flow-strip {
-      background: #ffffff;
+      background: var(--panel-bg);
       border-radius: 12px;
-      padding: 14px 18px;
-      margin-bottom: 18px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      padding: 16px 20px;
+      margin-bottom: 20px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.25);
       display: grid;
       grid-template-columns: 1fr auto 1fr;
       align-items: center;
-      gap: 15px;
+      gap: 18px;
       text-align: center;
     }
 
-    @media (max-width: 700px) {
+    @media (max-width: 720px) {
       .flow-strip { grid-template-columns: 1fr; }
     }
 
     .flow-block {
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      padding: 10px;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 14px;
     }
+
+    .flow-block.in { border-top: 3px solid var(--cyan-glow); }
+    .flow-block.out { border-top: 3px solid var(--emerald-accent); }
 
     .flow-block h4 {
       font-size: 0.8rem;
       text-transform: uppercase;
-      color: #64748b;
-      margin-bottom: 4px;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      margin-bottom: 5px;
     }
 
     .flow-block .val {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: #0f172a;
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .flow-arrow {
+      font-size: 1.6rem;
+      color: var(--cyan-glow);
+      font-weight: bold;
+      animation: pulseFlow 1.6s infinite ease-in-out;
+    }
+
+    @keyframes pulseFlow {
+      0%, 100% { transform: scale(1); opacity: 0.7; }
+      50% { transform: scale(1.15); opacity: 1; text-shadow: 0 0 10px var(--cyan-glow); }
     }
 
     .cards-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
       gap: 14px;
-      margin-bottom: 20px;
+      margin-bottom: 22px;
     }
 
     .param-card {
-      background: #ffffff;
+      background: var(--card-bg);
       border-radius: 12px;
-      padding: 16px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-      border: 1px solid #e2e8f0;
-      transition: transform 0.15s ease;
+      padding: 18px 16px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      transition: all 0.2s ease;
+      position: relative;
     }
 
     .param-card:hover {
-      transform: translateY(-2px);
+      transform: translateY(-3px);
+      border-color: rgba(6, 182, 212, 0.5);
     }
 
     .card-title {
-      font-size: 0.8rem;
-      color: #64748b;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
       display: flex;
       align-items: center;
-      gap: 5px;
-      font-weight: 500;
+      gap: 6px;
+      font-weight: 600;
     }
 
     .card-value {
-      font-size: 1.55rem;
-      font-weight: 700;
-      color: #1e293b;
-      margin: 8px 0 2px 0;
+      font-size: 1.65rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 10px 0 4px 0;
     }
 
     .card-sub {
       font-size: 0.75rem;
-      color: #94a3b8;
+      color: #64748b;
     }
 
     .panel-box {
-      background: #ffffff;
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-      border: 1px solid #e2e8f0;
-      margin-bottom: 20px;
+      background: var(--panel-bg);
+      border-radius: 14px;
+      padding: 22px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+      margin-bottom: 22px;
     }
 
     .panel-header {
       font-size: 1.05rem;
       font-weight: 700;
-      color: #1e293b;
-      margin-bottom: 15px;
+      color: #ffffff;
+      margin-bottom: 16px;
       display: flex;
       align-items: center;
       gap: 8px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 10px;
     }
 
-    /* Fixed Canvas Display */
     .canvas-container {
       width: 100%;
-      background: #0f172a;
-      border-radius: 8px;
-      padding: 10px;
+      background: #090e1a;
+      border-radius: 10px;
+      padding: 12px;
+      border: 1px solid #1e293b;
     }
 
     canvas {
@@ -240,8 +298,8 @@
     }
 
     .control-item {
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
       border-radius: 10px;
       padding: 14px;
       display: flex;
@@ -252,12 +310,12 @@
     .control-item span {
       font-size: 0.88rem;
       font-weight: 600;
-      color: #334155;
+      color: #cbd5e1;
     }
 
     .toggle-btn {
       width: 100%;
-      padding: 10px;
+      padding: 11px;
       border-radius: 6px;
       border: none;
       font-size: 0.82rem;
@@ -267,88 +325,185 @@
       transition: 0.2s;
     }
 
-    .btn-green { background: #10b981; color: #ffffff; }
-    .btn-red { background: #ef4444; color: #ffffff; }
+    .btn-green {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #ffffff;
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+    }
+
+    .btn-red {
+      background: linear-gradient(135deg, #f43f5e, #be123c);
+      color: #ffffff;
+      box-shadow: 0 0 10px rgba(244, 63, 94, 0.3);
+    }
+
+    .btn-cyan {
+      background: linear-gradient(135deg, var(--cyan-glow), #0284c7);
+      color: #04101e;
+      font-weight: 800;
+      box-shadow: 0 0 10px rgba(6, 182, 212, 0.3);
+    }
 
     .mode-box { display: flex; gap: 10px; margin-top: 10px; }
     .mode-btn {
       flex: 1; padding: 12px; font-weight: 700; border-radius: 8px;
-      border: 1px solid #cbd5e1; background: #f1f5f9; color: #475569; cursor: pointer;
+      border: 1px solid var(--border-color); background: #1e293b; color: var(--text-muted); cursor: pointer;
+      transition: all 0.2s ease;
     }
-    .mode-btn.active-mode { background: #f59e0b; color: #ffffff; border-color: #f59e0b; }
+    .mode-btn.active-mode {
+      background: linear-gradient(135deg, var(--cyan-glow), #0284c7);
+      color: #04101e;
+      border-color: var(--cyan-glow);
+    }
 
     .report-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-    .report-table td { padding: 12px 14px; border-bottom: 1px solid #e2e8f0; font-size: 0.9rem; }
-    .report-table td:nth-child(2) { font-weight: 700; text-align: right; color: #1e293b; }
+    .report-table td { padding: 14px; border-bottom: 1px solid var(--border-color); font-size: 0.9rem; }
+    .report-table td:nth-child(1) { color: var(--text-muted); }
+    .report-table td:nth-child(2) { font-weight: 700; text-align: right; color: #ffffff; }
+
+    /* Admin Specific Styling */
+    .admin-form-group {
+      margin-bottom: 16px;
+      text-align: left;
+    }
+    .admin-form-group label {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+    .admin-input {
+      width: 100%;
+      background: #090e1a;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 10px 14px;
+      color: #fff;
+      font-size: 0.95rem;
+      outline: none;
+    }
+    .admin-input:focus {
+      border-color: var(--cyan-glow);
+    }
+    .admin-login-card {
+      max-width: 420px;
+      margin: 40px auto;
+      background: var(--panel-bg);
+      border: 1px solid var(--border-color);
+      padding: 28px;
+      border-radius: 14px;
+      text-align: center;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    }
+    .audit-log-terminal {
+      background: #070b14;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      padding: 12px;
+      height: 160px;
+      overflow-y: auto;
+      font-family: Consolas, monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      text-align: left;
+    }
+    .audit-entry { margin-bottom: 4px; }
+    .audit-entry.alert { color: var(--danger-accent); }
+    .audit-entry.info { color: var(--cyan-glow); }
+
+    .slab-card {
+      background: #090e1a;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .slab-card label {
+      font-size: 0.82rem;
+      color: #cbd5e1;
+    }
+    .slab-card input {
+      width: 90px;
+      background: #16203a;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 6px 10px;
+      color: #fff;
+      text-align: right;
+      font-weight: 700;
+    }
 
     /* Team Member Cards */
     .team-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
       gap: 16px;
       margin-top: 10px;
     }
 
     .team-card {
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      border-radius: 12px;
-      padding: 16px;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 18px;
       display: flex;
       align-items: center;
-      gap: 14px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-      transition: transform 0.2s;
-    }
-
-    .team-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+      gap: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     }
 
     .avatar-wrapper {
-      width: 82px;
-      height: 82px;
+      width: 84px;
+      height: 84px;
       border-radius: 50%;
-      border: 3px solid #f59e0b;
+      border: 3px solid var(--cyan-glow);
       overflow: hidden;
       flex-shrink: 0;
-      background: #e2e8f0;
+      background: #0f172a;
     }
 
     .dev-avatar {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      object-position: center 20%;
+      object-position: center top;
       display: block;
     }
 
     .dev-details h4 {
-      font-size: 1rem;
-      color: #0f172a;
-      margin-bottom: 2px;
+      font-size: 1.05rem;
+      color: #ffffff;
+      margin-bottom: 3px;
     }
 
     .dev-role {
-      font-size: 0.78rem;
-      color: #d97706;
+      font-size: 0.8rem;
+      color: var(--cyan-glow);
       font-weight: 700;
       margin-bottom: 4px;
     }
 
     .dev-class {
       font-size: 0.78rem;
-      color: #64748b;
+      color: var(--text-muted);
     }
 
-    .page-section { display: none; }
-    .page-section.show { display: block; }
+    /* Page Visibility Classes */
+    .page-section {
+      display: none !important;
+    }
+    .page-section.show {
+      display: block !important;
+    }
 
     footer {
       text-align: center;
-      margin-top: 30px;
-      font-size: 0.8rem;
+      margin-top: 35px;
+      font-size: 0.82rem;
       color: #64748b;
     }
   </style>
@@ -357,16 +512,17 @@
 
   <header class="top-header">
     <h1>⚡ Smart Meter IoT Control Center</h1>
-    <p>Smart Electricity Meter Monitoring & Manual Load Control</p>
+    <p>Real-Time Electrical Telemetry, Anti-Tamper & Grid Management</p>
     <div class="dev-tag">
       Team: PATHAN MOIN | QURESHI KAIS | PATHAN HUZEFA
     </div>
   </header>
 
   <nav class="nav-bar">
-    <button class="nav-btn active" onclick="switchTab('dashboard')">📊 Dashboard</button>
-    <button class="nav-btn" onclick="switchTab('control')">🎛️ Control</button>
-    <button class="nav-btn" onclick="switchTab('reports')">📑 Reports & Team</button>
+    <button class="nav-btn active" onclick="switchTab('dashboard', this)">📊 Dashboard</button>
+    <button class="nav-btn" onclick="switchTab('control', this)">🎛️ Control</button>
+    <button class="nav-btn" onclick="switchTab('reports', this)">📑 Reports & Team</button>
+    <button class="nav-btn" onclick="switchTab('admin', this)">🔐 Admin Portal</button>
   </nav>
 
   <div class="main-container">
@@ -374,96 +530,94 @@
     <!-- 1. DASHBOARD PAGE -->
     <div id="page-dashboard" class="page-section show">
       
-      <div class="status-banner">
+      <div class="status-banner" id="banner-box">
         <div>
           <h3 id="grid-status-title">⚡ Normal Grid Supply</h3>
-          <p id="grid-status-sub">● System Working Normally</p>
+          <p id="grid-status-sub">● All Systems Online & Tamper Guard Active</p>
         </div>
-        <div style="font-size: 0.85rem; font-weight: 600; color: #475569;">
-          Meter Mode: <span id="dash-mode-text" style="color: #f59e0b;">AUTO</span>
+        <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted);">
+          Tamper Status: <span id="dash-tamper-text" style="color: var(--emerald-accent);">SECURED (NO TAMPER)</span>
         </div>
       </div>
 
       <div class="flow-strip">
-        <div class="flow-block">
+        <div class="flow-block in">
           <h4>⚡ Input Line (Grid Incomer)</h4>
-          <div class="val" id="disp-in-v" style="color: #0284c7;">230.2 V</div>
-          <small style="color: #64748b;">Freq: 50.0 Hz | Phase: Single</small>
+          <div class="val" id="disp-in-v" style="color: var(--cyan-glow);">230.2 V</div>
+          <small style="color: var(--text-muted);">Freq: 50.0 Hz | Phase: Single Phase AC</small>
         </div>
-        <div style="font-size: 1.5rem; color: #f59e0b; font-weight: bold;" id="flow-arrow">⮞ ⮞ ⮞</div>
-        <div class="flow-block">
+        <div class="flow-arrow" id="flow-arrow">⮞ ⮞ ⮞</div>
+        <div class="flow-block out">
           <h4>🔌 Output Line (Consumer Load)</h4>
-          <div class="val" id="disp-out-p" style="color: #10b981;">370 W</div>
-          <small style="color: #64748b;">Current: <span id="disp-out-i">1.61</span> A | PF: 0.98</small>
+          <div class="val" id="disp-out-p" style="color: var(--emerald-accent);">370 W</div>
+          <small style="color: var(--text-muted);">Current: <span id="disp-out-i">1.61</span> A | Power Factor: 0.98</small>
         </div>
       </div>
 
       <div class="cards-grid">
         <div class="param-card">
           <div class="card-title">⚡ Line Voltage</div>
-          <div class="card-value" id="val-v">230.2 V</div>
+          <div class="card-value" id="val-v" style="color: var(--cyan-glow);">230.2 V</div>
           <div class="card-sub">RMS Potential</div>
         </div>
 
         <div class="param-card">
           <div class="card-title">💡 Load Current</div>
-          <div class="card-value" id="val-i">1.61 A</div>
-          <div class="card-sub">Current Drawn</div>
+          <div class="card-value" id="val-i" style="color: #38bdf8;">1.61 A</div>
+          <div class="card-sub">Drawn Current</div>
         </div>
 
         <div class="param-card">
           <div class="card-title">🔥 Active Power</div>
-          <div class="card-value" id="val-p" style="color: #d97706;">370 W</div>
+          <div class="card-value" id="val-p" style="color: var(--amber-accent);">370 W</div>
           <div class="card-sub">Real Power (P = V × I)</div>
         </div>
 
         <div class="param-card">
-          <div class="card-title">📦 Total Energy</div>
-          <div class="card-value" id="val-e" style="color: #0284c7;">0.000 Wh</div>
-          <div class="card-sub">Accumulated Units</div>
+          <div class="card-title">🛡️ Anti-Tamper State</div>
+          <div class="card-value" id="val-tamper" style="color: var(--emerald-accent); font-size: 1.35rem;">SECURED</div>
+          <div class="card-sub">Hardware Enclosure Guard</div>
         </div>
 
         <div class="param-card">
           <div class="card-title">💰 Live Bill Due</div>
-          <div class="card-value" id="val-cost" style="color: #ef4444;">₹ 0.00</div>
-          <div class="card-sub">Rate: ₹ 7.50 / Unit</div>
+          <div class="card-value" id="val-cost" style="color: var(--danger-accent);">₹ 0.00</div>
+          <div class="card-sub" id="dash-tariff-label">Slab-Wise Telescopic Billing</div>
         </div>
 
         <div class="param-card">
           <div class="card-title">💳 Prepaid Wallet</div>
-          <div class="card-value" id="val-wallet" style="color: #10b981;">₹ 250.00</div>
+          <div class="card-value" id="val-wallet" style="color: var(--emerald-accent);">₹ 250.00</div>
           <div class="card-sub">Auto-trip at ₹0</div>
         </div>
 
         <div class="param-card">
           <div class="card-title">🌐 Grid Frequency</div>
           <div class="card-value" id="val-freq">50.0 Hz</div>
-          <div class="card-sub">AC Sync Frequency</div>
+          <div class="card-sub">AC Synchronization</div>
         </div>
 
         <div class="param-card">
-          <div class="card-title">🌿 Carbon Emission</div>
-          <div class="card-value" id="val-co2">0.00 kg</div>
-          <div class="card-sub">0.82 kg / kWh</div>
+          <div class="card-title">🌿 Carbon Footprint</div>
+          <div class="card-value" id="val-co2" style="color: #34d399;">0.00 kg</div>
+          <div class="card-sub">Emission: 0.82 kg/kWh</div>
         </div>
       </div>
 
-      <!-- Graph with Fixed Canvas Resolution -->
       <div class="panel-box">
-        <div class="panel-header">📈 Live Power Graph (Real-Time Output Load Curve)</div>
+        <div class="panel-header">📈 Real-Time Output Load Curve (Telemetry Stream)</div>
         <div class="canvas-container">
           <canvas id="powerChart" width="1000" height="220"></canvas>
         </div>
       </div>
 
-      <!-- Team Section -->
       <div class="panel-box">
         <div class="panel-header">👥 Project Developers & Team Members</div>
         <div class="team-grid">
           
           <div class="team-card">
             <div class="avatar-wrapper">
-              <img class="dev-avatar" src="moin.jpg" onerror="this.onerror=null; this.src='image_2.png';" alt="Pathan Moin">
+              <img class="dev-avatar" src="moin.jpg?v=7" onerror="this.onerror=null; this.src='image_2.png';" alt="Pathan Moin">
             </div>
             <div class="dev-details">
               <h4>Pathan Moin M.</h4>
@@ -475,7 +629,7 @@
 
           <div class="team-card">
             <div class="avatar-wrapper">
-              <img class="dev-avatar" src="kais.jpg" onerror="this.onerror=null; this.src='kais.png';" alt="Qureshi Kais">
+              <img class="dev-avatar" src="kais.jpg?v=7" onerror="this.onerror=null; this.src='kais.png';" alt="Qureshi Kais">
             </div>
             <div class="dev-details">
               <h4>Qureshi Kais Amjad</h4>
@@ -487,7 +641,7 @@
 
           <div class="team-card">
             <div class="avatar-wrapper">
-              <img class="dev-avatar" src="huzefa.jpg" onerror="this.onerror=null; this.src='huzefa.png';" alt="Pathan Huzefa">
+              <img class="dev-avatar" src="huzefa.jpg?v=7" onerror="this.onerror=null; this.src='huzefa.png';" alt="Pathan Huzefa">
             </div>
             <div class="dev-details">
               <h4>Pathan Huzefa Naim</h4>
@@ -503,13 +657,24 @@
 
     <!-- 2. CONTROL PAGE -->
     <div id="page-control" class="page-section">
+      <div class="panel-box" style="border: 1px solid var(--danger-accent);">
+        <div class="panel-header" style="color: var(--danger-accent);">🚨 Anti-Tamper & Security Control Unit</div>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 14px;">
+          Simulate illegal electricity theft, current bypass, or enclosure seal tampering. When triggered, the system isolates the consumer load line immediately.
+        </p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+          <button class="toggle-btn btn-red" style="flex: 1; padding: 14px;" onclick="triggerTamperAlert()">⚠ SIMULATE METER TAMPER / BYPASS</button>
+          <button class="toggle-btn btn-green" style="flex: 1; padding: 14px;" onclick="resetTamperAlert()">🛡️ RESET TAMPER / RESTORE SYSTEM</button>
+        </div>
+      </div>
+
       <div class="panel-box">
-        <div class="panel-header">🎛️ Manual Load & Relay Control</div>
+        <div class="panel-header">🎛️ Manual Load & Relay Switching Control</div>
         
         <div class="controls-grid">
           <div class="control-item">
             <span>Main System Breaker</span>
-            <button id="ctrl-main" class="toggle-btn btn-green" onclick="toggleMain()">SYSTEM ON</button>
+            <button id="ctrl-main" class="toggle-btn btn-green" onclick="toggleMain()">SYSTEM ONLINE</button>
           </div>
 
           <div class="control-item">
@@ -533,15 +698,15 @@
           </div>
 
           <div class="control-item">
-            <span>Prepaid Balance Wallet</span>
+            <span>Prepaid Balance Topup</span>
             <button class="toggle-btn btn-green" onclick="rechargeWallet()">+ ₹100 RECHARGE</button>
           </div>
         </div>
 
-        <div class="panel-header" style="margin-top: 20px;">⚙️ Operating Mode</div>
+        <div class="panel-header" style="margin-top: 24px;">⚙️ Grid Automation Mode</div>
         <div class="mode-box">
-          <button id="mode-auto" class="mode-btn active-mode" onclick="setMode('AUTO')">AUTO</button>
-          <button id="mode-manual" class="mode-btn" onclick="setMode('MANUAL')">MANUAL</button>
+          <button id="mode-auto" class="mode-btn active-mode" onclick="setMode('AUTO')">AUTO MODE</button>
+          <button id="mode-manual" class="mode-btn" onclick="setMode('MANUAL')">MANUAL OVERRIDE</button>
         </div>
       </div>
     </div>
@@ -549,59 +714,163 @@
     <!-- 3. REPORTS PAGE -->
     <div id="page-reports" class="page-section">
       <div class="panel-box">
-        <div class="panel-header">📑 Smart Meter Performance Report</div>
+        <div class="panel-header">📑 Smart Meter Performance Analytics Report</div>
         
         <table class="report-table">
           <tr>
-            <td>Maximum Peak Power</td>
-            <td id="rep-peak">370 W</td>
+            <td>Maximum Peak Power Recorded</td>
+            <td id="rep-peak" style="color: var(--amber-accent);">370 W</td>
           </tr>
           <tr>
-            <td>Average Power Consumption</td>
+            <td>Average Load Consumption</td>
             <td id="rep-avg">370 W</td>
           </tr>
           <tr>
             <td>Total Energy Consumed</td>
-            <td id="rep-energy">0.000 Wh</td>
+            <td id="rep-energy" style="color: var(--cyan-glow);">0.000 Wh</td>
           </tr>
           <tr>
             <td>Estimated Billing Cost</td>
-            <td id="rep-cost">₹ 0.00</td>
+            <td id="rep-cost" style="color: var(--danger-accent);">₹ 0.00</td>
           </tr>
           <tr>
-            <td>Sanctioned Load Limit</td>
-            <td>3.50 kW (3500 W)</td>
+            <td>Tariff Structure (Telescopic)</td>
+            <td id="rep-tariff-rate">1-100: ₹4.50 | 101-200: ₹7.50 | >200: ₹11.00</td>
           </tr>
           <tr>
-            <td>Operating Mode</td>
+            <td>Tamper Sensor Status</td>
+            <td id="rep-tamper" style="color: var(--emerald-accent);">SECURED (NO VIOLATION)</td>
+          </tr>
+          <tr>
+            <td>Sanctioned Load Capacity</td>
+            <td id="rep-sanctioned">3.50 kW (3500 W Max)</td>
+          </tr>
+          <tr>
+            <td>System Operating Mode</td>
             <td id="rep-mode">AUTO</td>
           </tr>
           <tr>
-            <td>Main Relay State</td>
-            <td id="rep-relay" style="color: #10b981;">CLOSED (CONNECTED)</td>
+            <td>Main Contactor / Relay Status</td>
+            <td id="rep-relay" style="color: var(--emerald-accent);">CLOSED (NORMAL)</td>
           </tr>
           <tr>
-            <td>IoT Gateway / Controller</td>
-            <td>ESP32 Microcontroller + PZEM-004T</td>
+            <td>Microcontroller Core</td>
+            <td>ESP-32 Dual Core Wi-Fi + PZEM-004T</td>
           </tr>
         </table>
       </div>
     </div>
 
+    <!-- 4. ADMIN PORTAL (DISCOM UTILITY PANEL) -->
+    <div id="page-admin" class="page-section">
+      
+      <!-- Admin Login Form (No Default Password Displayed) -->
+      <div id="admin-login-box" class="admin-login-card">
+        <div style="font-size: 2.2rem; margin-bottom: 8px;">🔐</div>
+        <h3 style="color: #fff; margin-bottom: 4px;">DISCOM Officer Authorization</h3>
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 20px;">Restricted Access: Authorized Grid Personnel Only</p>
+        
+        <div class="admin-form-group">
+          <label for="admin-passcode">Enter Security PIN:</label>
+          <input type="password" id="admin-passcode" class="admin-input" placeholder="••••••••" autocomplete="off">
+        </div>
+        <button class="toggle-btn btn-cyan" onclick="loginAdmin()">UNLOCK UTILITY PANEL</button>
+        <p id="admin-login-err" style="color: var(--danger-accent); font-size: 0.78rem; margin-top: 10px; display: none;">Invalid Passcode! Access Denied.</p>
+      </div>
+
+      <!-- Admin Management Console -->
+      <div id="admin-console" style="display: none;">
+        
+        <div class="panel-box" style="border-top: 3px solid var(--cyan-glow);">
+          <div class="panel-header" style="justify-content: space-between;">
+            <span>⚡ DISCOM Smart Grid Officer Controls</span>
+            <button class="toggle-btn btn-red" style="width: auto; padding: 6px 16px;" onclick="logoutAdmin()">LOCK SESSION</button>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 16px;">
+            
+            <!-- Telescopic Slab-Wise Tariff Manager -->
+            <div class="control-item" style="grid-column: span 1;">
+              <span>Telescopic Slab Tariff Structure (₹ / Unit)</span>
+              
+              <div class="slab-card">
+                <label>Slab 1 (1 - 100 Units):</label>
+                <input type="number" id="slab-1" value="4.50" step="0.25">
+              </div>
+
+              <div class="slab-card">
+                <label>Slab 2 (101 - 200 Units):</label>
+                <input type="number" id="slab-2" value="7.50" step="0.25">
+              </div>
+
+              <div class="slab-card">
+                <label>Slab 3 (201 - 1000 Units):</label>
+                <input type="number" id="slab-3" value="11.00" step="0.50">
+              </div>
+
+              <button class="toggle-btn btn-cyan" onclick="updateSlabTariffs()">UPDATE SLAB RATES</button>
+            </div>
+
+            <!-- Sanctioned Load -->
+            <div class="control-item">
+              <span>Sanctioned Load Limit (Watts)</span>
+              <p style="font-size: 0.75rem; color: var(--text-muted);">Set maximum permitted household demand</p>
+              <input type="number" id="adm-load-limit" class="admin-input" value="3500" step="500">
+              <button class="toggle-btn btn-cyan" onclick="updateLoadLimit()">UPDATE LOAD LIMIT</button>
+            </div>
+
+            <!-- Remote Utility Breaker -->
+            <div class="control-item">
+              <span>DISCOM Remote Grid Cutoff</span>
+              <p style="font-size: 0.75rem; color: var(--text-muted);">Force isolate line from central substation</p>
+              <button id="adm-grid-trip-btn" class="toggle-btn btn-red" onclick="adminForceTrip()">REMOTE LINE CUTOFF</button>
+            </div>
+
+            <!-- Reset Registers -->
+            <div class="control-item">
+              <span>Reset Energy kWh Registers</span>
+              <p style="font-size: 0.75rem; color: var(--text-muted);">Zero out meter counters for next cycle</p>
+              <button class="toggle-btn btn-green" onclick="adminResetRegisters()">RESET TO 0.00 kWh</button>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="panel-box">
+          <div class="panel-header">📜 DISCOM Hardware Security & Audit Trail</div>
+          <div class="audit-log-terminal" id="audit-log-box">
+            <div class="audit-entry info">[SYSTEM] DISCOM Secure Session Initialized.</div>
+            <div class="audit-entry">[AUDIT] Telescopic Multi-Tier Engine Online.</div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
   </div>
 
   <footer>
-    <p>Smart Electricity Meter Monitoring & Manual Control System &copy; 2026-27</p>
-    <p style="margin-top: 4px;">S.M.B.S.T. College Sangamner | Savitribai Phule Pune University</p>
+    <p>Smart Electricity Meter Monitoring & Telemetry Control System &copy; 2026-27</p>
+    <p style="margin-top: 4px; color: #475569;">S.M.B.S.T. College Sangamner | Savitribai Phule Pune University</p>
   </footer>
 
   <script>
     let isSystemOn = true;
+    let isTampered = false;
+    let isAdminForceCut = false;
     let currentMode = 'AUTO';
     let baseVoltage = 230.0;
     let walletBalance = 250.00;
     let accumulatedWh = 0.00;
-    const TARIFF = 7.50;
+    let maxPermittedWatts = 3500;
+
+    // Multi-Slab Tariff Structure
+    let tariffSlabs = {
+      slab1: 4.50,  // 1 - 100 units
+      slab2: 7.50,  // 101 - 200 units
+      slab3: 11.00  // 201 - 1000 units
+    };
 
     const apps = {
       ac: { state: false, watts: 1800 },
@@ -615,21 +884,134 @@
     let powerReadingsCount = 0;
     let powerReadingsSum = 0;
 
-    // Buffer initialized with values
     const graphHistory = new Array(30).fill(370);
     const canvas = document.getElementById('powerChart');
     const ctx = canvas.getContext('2d');
 
-    function switchTab(tabId) {
-      document.querySelectorAll('.page-section').forEach(el => el.classList.remove('show'));
-      document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+    // Telescopic Tariff Calculation (Real Discom Logic)
+    function calculateTelescopicCost(totalKwh) {
+      let cost = 0;
+      if (totalKwh <= 100) {
+        cost = totalKwh * tariffSlabs.slab1;
+      } else if (totalKwh <= 200) {
+        cost = (100 * tariffSlabs.slab1) + ((totalKwh - 100) * tariffSlabs.slab2);
+      } else {
+        cost = (100 * tariffSlabs.slab1) + (100 * tariffSlabs.slab2) + ((totalKwh - 200) * tariffSlabs.slab3);
+      }
+      return cost;
+    }
 
-      document.getElementById('page-' + tabId).classList.add('show');
-      event.currentTarget.classList.add('active');
+    function logAudit(msg, isAlert = false) {
+      const box = document.getElementById('audit-log-box');
+      if (!box) return;
+      const t = new Date().toTimeString().split(' ')[0];
+      const div = document.createElement('div');
+      div.className = 'audit-entry ' + (isAlert ? 'alert' : '');
+      div.innerText = `[${t}] ${msg}`;
+      box.prepend(div);
+    }
+
+    function switchTab(tabName, clickedBtn) {
+      const allSections = document.querySelectorAll('.page-section');
+      allSections.forEach(section => {
+        section.classList.remove('show');
+      });
+
+      const allBtns = document.querySelectorAll('.nav-btn');
+      allBtns.forEach(btn => {
+        btn.classList.remove('active');
+      });
+
+      const target = document.getElementById('page-' + tabName);
+      if (target) {
+        target.classList.add('show');
+      }
+
+      if (clickedBtn) {
+        clickedBtn.classList.add('active');
+      }
+    }
+
+    function loginAdmin() {
+      const pin = document.getElementById('admin-passcode').value;
+      if (pin === '1234') {
+        document.getElementById('admin-login-box').style.display = 'none';
+        document.getElementById('admin-console').style.display = 'block';
+        document.getElementById('admin-login-err').style.display = 'none';
+        logAudit('Admin Officer Logged In via Terminal.');
+      } else {
+        document.getElementById('admin-login-err').style.display = 'block';
+      }
+    }
+
+    function logoutAdmin() {
+      document.getElementById('admin-passcode').value = '';
+      document.getElementById('admin-login-box').style.display = 'block';
+      document.getElementById('admin-console').style.display = 'none';
+      logAudit('Admin Officer Logged Out.');
+    }
+
+    function updateSlabTariffs() {
+      const s1 = parseFloat(document.getElementById('slab-1').value);
+      const s2 = parseFloat(document.getElementById('slab-2').value);
+      const s3 = parseFloat(document.getElementById('slab-3').value);
+
+      if (!isNaN(s1) && !isNaN(s2) && !isNaN(s3)) {
+        tariffSlabs.slab1 = s1;
+        tariffSlabs.slab2 = s2;
+        tariffSlabs.slab3 = s3;
+
+        const label = `1-100: ₹${s1.toFixed(2)} | 101-200: ₹${s2.toFixed(2)} | >200: ₹${s3.toFixed(2)}`;
+        document.getElementById('rep-tariff-rate').innerText = label;
+        alert('Telescopic Slab Rates Updated Successfully!\n' + label);
+        logAudit(`Slab Rates Updated: [1-100: ₹${s1}], [101-200: ₹${s2}], [201+: ₹${s3}]`);
+      }
+    }
+
+    function updateLoadLimit() {
+      const newLimit = parseInt(document.getElementById('adm-load-limit').value);
+      if (!isNaN(newLimit) && newLimit >= 500) {
+        maxPermittedWatts = newLimit;
+        document.getElementById('rep-sanctioned').innerText = (maxPermittedWatts / 1000).toFixed(2) + ' kW (' + maxPermittedWatts + ' W Max)';
+        alert('Sanctioned Load Limit set to ' + maxPermittedWatts + ' W');
+        logAudit(`Sanctioned limit adjusted to ${maxPermittedWatts}W`);
+      }
+    }
+
+    function adminForceTrip() {
+      isAdminForceCut = !isAdminForceCut;
+      const btn = document.getElementById('adm-grid-trip-btn');
+      if (isAdminForceCut) {
+        btn.innerText = 'RESTORE GRID LINE';
+        btn.className = 'toggle-btn btn-green';
+        isSystemOn = false;
+        totalWatts = 0;
+        document.getElementById('grid-status-title').innerText = '🛑 Substation Remote Cutoff';
+        document.getElementById('grid-status-sub').innerText = '● Line Isolated by DISCOM Substation Admin';
+        document.getElementById('grid-status-sub').style.color = 'var(--danger-accent)';
+        logAudit('CRITICAL: Substation Remotely Disconnected Consumer Line.', true);
+      } else {
+        btn.innerText = 'REMOTE LINE CUTOFF';
+        btn.className = 'toggle-btn btn-red';
+        isSystemOn = true;
+        resetTamperAlert();
+        logAudit('Substation Restored Consumer Line Connection.');
+      }
+    }
+
+    function adminResetRegisters() {
+      accumulatedWh = 0.00;
+      walletBalance = 250.00;
+      document.getElementById('val-cost').innerText = '₹ 0.00';
+      document.getElementById('val-wallet').innerText = '₹ 250.00';
+      document.getElementById('rep-energy').innerText = '0.000 Wh';
+      document.getElementById('rep-cost').innerText = '₹ 0.00';
+      alert('Accumulated Energy and Billing Registers zeroed successfully.');
+      logAudit('Energy kWh Registers Reset to 0.000.');
     }
 
     function toggleApp(name, watts) {
-      if (!isSystemOn) return;
+      if (!isSystemOn || isTampered || isAdminForceCut) return;
       apps[name].state = !apps[name].state;
       const btn = document.getElementById('ctrl-' + name);
 
@@ -643,7 +1025,77 @@
       calcTotalWatts();
     }
 
+    function triggerTamperAlert() {
+      isTampered = true;
+      isSystemOn = false;
+      totalWatts = 0;
+
+      const banner = document.getElementById('banner-box');
+      banner.classList.add('tampered');
+      document.getElementById('grid-status-title').innerText = '🚨 CRITICAL TAMPER DETECTED!';
+      document.getElementById('grid-status-sub').innerText = '● Illegal Bypass / Enclosure Breached! Line Isolated.';
+      document.getElementById('grid-status-sub').style.color = 'var(--danger-accent)';
+      
+      document.getElementById('dash-tamper-text').innerText = 'VIOLATION DETECTED';
+      document.getElementById('dash-tamper-text').style.color = 'var(--danger-accent)';
+
+      document.getElementById('val-tamper').innerText = 'TAMPERED';
+      document.getElementById('val-tamper').style.color = 'var(--danger-accent)';
+
+      document.getElementById('rep-tamper').innerText = 'CRITICAL VIOLATION DETECTED (AUTO-SHUTDOWN)';
+      document.getElementById('rep-tamper').style.color = 'var(--danger-accent)';
+
+      document.getElementById('ctrl-main').className = 'toggle-btn btn-red';
+      document.getElementById('ctrl-main').innerText = 'LINE ISOLATED';
+      document.getElementById('flow-arrow').innerText = '✖ TAMPER CUT ✖';
+      document.getElementById('flow-arrow').style.color = 'var(--danger-accent)';
+      document.getElementById('rep-relay').innerText = 'OPEN (TAMPER SHUTDOWN)';
+      document.getElementById('rep-relay').style.color = 'var(--danger-accent)';
+
+      logAudit('SECURITY ALERT: Hardware Enclosure Tamper Triggered!', true);
+      alert('⚠️ SMART METER ALERT!\nTampering Detected: Neutral line bypass or magnetic interference detected.\nContactor opened automatically.');
+    }
+
+    function resetTamperAlert() {
+      if (isAdminForceCut) {
+        alert('Cannot restore! Line is locked by DISCOM Central Substation.');
+        return;
+      }
+      isTampered = false;
+      isSystemOn = true;
+
+      const banner = document.getElementById('banner-box');
+      banner.classList.remove('tampered');
+      document.getElementById('grid-status-title').innerText = '⚡ Normal Grid Supply';
+      document.getElementById('grid-status-sub').innerText = '● All Systems Online & Tamper Guard Active';
+      document.getElementById('grid-status-sub').style.color = 'var(--emerald-accent)';
+
+      document.getElementById('dash-tamper-text').innerText = 'SECURED (NO TAMPER)';
+      document.getElementById('dash-tamper-text').style.color = 'var(--emerald-accent)';
+
+      document.getElementById('val-tamper').innerText = 'SECURED';
+      document.getElementById('val-tamper').style.color = 'var(--emerald-accent)';
+
+      document.getElementById('rep-tamper').innerText = 'SECURED (NO VIOLATION)';
+      document.getElementById('rep-tamper').style.color = 'var(--emerald-accent)';
+
+      document.getElementById('ctrl-main').className = 'toggle-btn btn-green';
+      document.getElementById('ctrl-main').innerText = 'SYSTEM ONLINE';
+      document.getElementById('flow-arrow').innerText = '⮞ ⮞ ⮞';
+      document.getElementById('flow-arrow').style.color = 'var(--cyan-glow)';
+      document.getElementById('rep-relay').innerText = 'CLOSED (NORMAL)';
+      document.getElementById('rep-relay').style.color = 'var(--emerald-accent)';
+
+      logAudit('Tamper Alarm Cleared. System Restored to Normal.');
+      calcTotalWatts();
+    }
+
     function toggleMain() {
+      if (isTampered || isAdminForceCut) {
+        alert('Cannot toggle breaker! Power line isolated due to security lockdown.');
+        return;
+      }
+
       isSystemOn = !isSystemOn;
       const btn = document.getElementById('ctrl-main');
       const arrow = document.getElementById('flow-arrow');
@@ -652,25 +1104,25 @@
 
       if (isSystemOn) {
         btn.className = 'toggle-btn btn-green';
-        btn.innerText = 'SYSTEM ON';
+        btn.innerText = 'SYSTEM ONLINE';
         arrow.innerText = '⮞ ⮞ ⮞';
-        arrow.style.color = '#f59e0b';
+        arrow.style.color = 'var(--cyan-glow)';
         bannerTitle.innerText = '⚡ Normal Grid Supply';
-        bannerSub.innerText = '● System Working Normally';
-        bannerSub.style.color = '#10b981';
-        document.getElementById('rep-relay').innerText = 'CLOSED (CONNECTED)';
-        document.getElementById('rep-relay').style.color = '#10b981';
+        bannerSub.innerText = '● All Systems Online & Tamper Guard Active';
+        bannerSub.style.color = 'var(--emerald-accent)';
+        document.getElementById('rep-relay').innerText = 'CLOSED (NORMAL)';
+        document.getElementById('rep-relay').style.color = 'var(--emerald-accent)';
         calcTotalWatts();
       } else {
         btn.className = 'toggle-btn btn-red';
-        btn.innerText = 'SYSTEM OFF (TRIPPED)';
+        btn.innerText = 'SYSTEM TRIPPED';
         arrow.innerText = '✖ LINE CUT ✖';
-        arrow.style.color = '#ef4444';
-        bannerTitle.innerText = '🛑 Main Contactor Tripped';
+        arrow.style.color = 'var(--danger-accent)';
+        bannerTitle.innerText = '🛑 Main Breaker Tripped';
         bannerSub.innerText = '● Output Line Disconnected';
-        bannerSub.style.color = '#ef4444';
+        bannerSub.style.color = 'var(--danger-accent)';
         document.getElementById('rep-relay').innerText = 'OPEN (TRIPPED)';
-        document.getElementById('rep-relay').style.color = '#ef4444';
+        document.getElementById('rep-relay').style.color = 'var(--danger-accent)';
         totalWatts = 0;
       }
     }
@@ -679,19 +1131,19 @@
       currentMode = mode;
       document.getElementById('mode-auto').classList.toggle('active-mode', mode === 'AUTO');
       document.getElementById('mode-manual').classList.toggle('active-mode', mode === 'MANUAL');
-      document.getElementById('dash-mode-text').innerText = mode;
       document.getElementById('rep-mode').innerText = mode;
     }
 
     function rechargeWallet() {
       walletBalance += 100.0;
-      if (!isSystemOn && walletBalance > 5) {
+      logAudit('Consumer Recharged Wallet: +₹100.');
+      if (!isSystemOn && !isTampered && !isAdminForceCut && walletBalance > 5) {
         toggleMain();
       }
     }
 
     function calcTotalWatts() {
-      if (!isSystemOn) {
+      if (!isSystemOn || isTampered || isAdminForceCut) {
         totalWatts = 0;
         return;
       }
@@ -700,15 +1152,17 @@
         if (apps[k].state) sum += apps[k].watts;
       }
       totalWatts = sum;
+
+      if (totalWatts > maxPermittedWatts) {
+        logAudit(`OVERLOAD WARNING: Load ${totalWatts}W exceeded sanctioned limit of ${maxPermittedWatts}W!`, true);
+      }
       if (totalWatts > peakPower) peakPower = totalWatts;
     }
 
-    // High Visibility Waveform Graph
     function drawChart() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Grid Lines
-      ctx.strokeStyle = '#334155';
+      ctx.strokeStyle = '#1e293b';
       ctx.lineWidth = 1;
       for (let y = 30; y < canvas.height; y += 45) {
         ctx.beginPath();
@@ -717,74 +1171,87 @@
         ctx.stroke();
       }
 
-      // Graph Waveform
       ctx.beginPath();
-      ctx.strokeStyle = '#38bdf8';
+      ctx.strokeStyle = isTampered ? '#f43f5e' : '#06b6d4';
       ctx.lineWidth = 3;
+      ctx.shadowColor = isTampered ? '#f43f5e' : '#06b6d4';
+      ctx.shadowBlur = 10;
       const step = canvas.width / (graphHistory.length - 1);
       const maxWatt = 3800;
 
       for (let i = 0; i < graphHistory.length; i++) {
         const x = i * step;
-        // Calculation ensures curve stays visible in the middle
         const y = canvas.height - (graphHistory[i] / maxWatt * (canvas.height - 50)) - 25;
         if (i === 0) ctx.moveTo(x, y);
         else ctx.lineTo(x, y);
       }
       ctx.stroke();
+      ctx.shadowBlur = 0;
 
-      // Soft Area Fill
       ctx.lineTo(canvas.width, canvas.height);
       ctx.lineTo(0, canvas.height);
-      ctx.fillStyle = 'rgba(56, 189, 248, 0.15)';
+      const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+      if (isTampered) {
+        gradient.addColorStop(0, 'rgba(244, 63, 94, 0.25)');
+        gradient.addColorStop(1, 'rgba(244, 63, 94, 0.0)');
+      } else {
+        gradient.addColorStop(0, 'rgba(6, 182, 212, 0.25)');
+        gradient.addColorStop(1, 'rgba(6, 182, 212, 0.0)');
+      }
+      ctx.fillStyle = gradient;
       ctx.fill();
     }
 
-    // 1-Second Continuous Loop
     setInterval(() => {
-      let v = isSystemOn ? (baseVoltage - 1.5 + Math.random() * 3) : 0;
-      let i = (isSystemOn && v > 0) ? (totalWatts / v) : 0;
+      let v = (isSystemOn && !isTampered && !isAdminForceCut) ? (baseVoltage - 1.2 + Math.random() * 2.4) : 0;
+      let i = (isSystemOn && !isTampered && !isAdminForceCut && v > 0) ? (totalWatts / v) : 0;
 
-      if (isSystemOn && totalWatts > 0) {
+      if (isSystemOn && !isTampered && !isAdminForceCut && totalWatts > 0) {
         const whSec = (totalWatts / 3600);
         accumulatedWh += whSec;
 
-        const kwh = accumulatedWh / 1000;
-        const costIncrement = (whSec / 1000) * TARIFF;
-        walletBalance = Math.max(0, walletBalance - costIncrement);
+        // Current unit consumption
+        const currentKwh = accumulatedWh / 1000;
+        
+        // Telescopic Billing Calculation
+        const totalBillCost = calculateTelescopicCost(currentKwh);
+
+        // Deduct from prepaid balance incrementally
+        const ratePerSec = (totalWatts / 3600000) * (currentKwh <= 100 ? tariffSlabs.slab1 : (currentKwh <= 200 ? tariffSlabs.slab2 : tariffSlabs.slab3));
+        walletBalance = Math.max(0, walletBalance - ratePerSec);
 
         if (walletBalance <= 0.05 && isSystemOn) {
           toggleMain();
+          logAudit('Consumer Prepaid Balance Exhausted. Auto-cut triggered.');
         }
+
+        document.getElementById('val-cost').innerText = '₹ ' + totalBillCost.toFixed(2);
+        document.getElementById('rep-cost').innerText = '₹ ' + totalBillCost.toFixed(2);
       }
 
       const totalKwh = accumulatedWh / 1000;
-      const billCost = totalKwh * TARIFF;
       const co2 = totalKwh * 0.82;
 
       powerReadingsCount++;
       powerReadingsSum += totalWatts;
       const avgWatts = (powerReadingsSum / powerReadingsCount);
 
-      // Add a slight natural variation to graph when running
       let displayWatts = totalWatts;
-      if (isSystemOn && totalWatts > 0) {
-        displayWatts += (Math.random() * 10 - 5);
+      if (isSystemOn && !isTampered && !isAdminForceCut && totalWatts > 0) {
+        displayWatts += (Math.random() * 8 - 4);
       }
 
       graphHistory.shift();
       graphHistory.push(displayWatts);
       drawChart();
 
-      document.getElementById('disp-in-v').innerText = (isSystemOn ? v.toFixed(1) + ' V' : '230.0 V (Grid Ready)');
+      document.getElementById('disp-in-v').innerText = (isSystemOn && !isTampered && !isAdminForceCut ? v.toFixed(1) + ' V' : '230.0 V (Grid Ready)');
       document.getElementById('disp-out-p').innerText = totalWatts + ' W';
       document.getElementById('disp-out-i').innerText = i.toFixed(2);
 
       document.getElementById('val-v').innerText = v.toFixed(1) + ' V';
       document.getElementById('val-i').innerText = i.toFixed(2) + ' A';
       document.getElementById('val-p').innerText = totalWatts + ' W';
-      document.getElementById('val-e').innerText = accumulatedWh < 1000 ? accumulatedWh.toFixed(2) + ' Wh' : totalKwh.toFixed(4) + ' kWh';
-      document.getElementById('val-cost').innerText = '₹ ' + billCost.toFixed(2);
       document.getElementById('val-wallet').innerText = '₹ ' + walletBalance.toFixed(2);
       document.getElementById('val-freq').innerText = (49.95 + Math.random() * 0.1).toFixed(2) + ' Hz';
       document.getElementById('val-co2').innerText = co2.toFixed(3) + ' kg';
@@ -792,7 +1259,6 @@
       document.getElementById('rep-peak').innerText = peakPower + ' W';
       document.getElementById('rep-avg').innerText = avgWatts.toFixed(1) + ' W';
       document.getElementById('rep-energy').innerText = totalKwh.toFixed(4) + ' kWh';
-      document.getElementById('rep-cost').innerText = '₹ ' + billCost.toFixed(2);
     }, 1000);
 
     calcTotalWatts();
